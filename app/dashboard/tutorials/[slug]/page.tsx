@@ -76,21 +76,47 @@ export default async function TutorialPage({ params }: Props) {
       </div>
 
       {/* Verse Code */}
-      <div className="glass-card rounded-2xl overflow-hidden">
-        <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/[0.06] bg-white/[0.02]">
-          <div className="flex items-center gap-2">
-            <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
-            <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/60" />
-            <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" />
-            <span className="ml-2 text-xs text-slate-500 font-mono">
-              {tutorial.slug.replace(/-/g, "_")}_device.verse
-            </span>
-          </div>
+      {tutorial.codeAnnotations ? (
+        <div className="space-y-4">
+          <h2 className="font-bold text-white text-lg">Code Walkthrough</h2>
+          {tutorial.codeAnnotations.map((ann, i) => (
+            <div key={i} className="glass-card rounded-2xl overflow-hidden">
+              {/* Section header */}
+              <div className="flex items-center gap-3 px-5 py-3.5 border-b border-white/[0.06] bg-white/[0.02]">
+                <span className="w-6 h-6 rounded-full bg-purple-500/20 border border-purple-500/30 text-purple-400 flex items-center justify-center text-[11px] font-bold shrink-0">
+                  {i + 1}
+                </span>
+                <span className="text-sm font-semibold text-slate-200">{ann.section}</span>
+              </div>
+              {/* Code */}
+              <pre className="code-block p-5 overflow-x-auto text-slate-300 whitespace-pre text-sm leading-7">
+                {ann.code}
+              </pre>
+              {/* Explanation */}
+              <div className="px-5 py-4 border-t border-white/[0.06] bg-blue-500/[0.03] flex gap-3">
+                <div className="w-1 rounded-full bg-blue-500/40 shrink-0 self-stretch" />
+                <p className="text-sm text-slate-400 leading-relaxed">{ann.explanation}</p>
+              </div>
+            </div>
+          ))}
         </div>
-        <pre className="code-block p-5 overflow-x-auto text-slate-300 whitespace-pre text-sm leading-7">
-          {tutorial.verseCode}
-        </pre>
-      </div>
+      ) : (
+        <div className="glass-card rounded-2xl overflow-hidden">
+          <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/[0.06] bg-white/[0.02]">
+            <div className="flex items-center gap-2">
+              <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
+              <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/60" />
+              <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" />
+              <span className="ml-2 text-xs text-slate-500 font-mono">
+                {tutorial.slug.replace(/-/g, "_")}_device.verse
+              </span>
+            </div>
+          </div>
+          <pre className="code-block p-5 overflow-x-auto text-slate-300 whitespace-pre text-sm leading-7">
+            {tutorial.verseCode}
+          </pre>
+        </div>
+      )}
 
       {/* Setup Steps */}
       <div className="glass-card rounded-2xl p-6">

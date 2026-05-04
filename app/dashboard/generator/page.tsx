@@ -5,22 +5,25 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Loader2, Code2, Cpu, BookOpen, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { generateVerseCode } from "@/lib/ai";
-import type { GenerateVerseResult, MapType, Difficulty, OutputType } from "@/types";
+import type { GenerateVerseResult } from "@/types";
+
+const SUGGESTIONS = [
+  "Award coins when a player enters a trigger zone",
+  "Countdown timer that opens a gate when time runs out",
+  "Button shop: deduct coins and grant an item to the buyer",
+  "Zone unlock: player pays coins to open a new area",
+  "Show a HUD message when a player enters a zone",
+  "Grant a reward item after completing an objective",
+  "Multi-trigger puzzle: activate 3 zones in sequence to win",
+  "Health regen station that restores HP on trigger",
+  "Spawn an enemy wave when players enter an area",
+  "Track kills and update a per-player leaderboard score",
+];
 
 export default function GeneratorPage() {
   const [description, setDescription] = useState("");
-  const [mapType, setMapType] = useState<MapType>("Tycoon");
-  const [difficulty, setDifficulty] = useState<Difficulty>("Beginner");
-  const [outputType, setOutputType] = useState<OutputType>("Code + Explanation");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<GenerateVerseResult | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -31,7 +34,12 @@ export default function GeneratorPage() {
     setError(null);
 
     try {
-      const res = await generateVerseCode({ description, mapType, difficulty, outputType });
+      const res = await generateVerseCode({
+        description,
+        mapType: "Other",
+        difficulty: "Beginner",
+        outputType: "Code + Explanation",
+      });
       setResult(res);
     } catch {
       setError("Failed to generate code. Please try again.");
@@ -67,58 +75,22 @@ export default function GeneratorPage() {
           </p>
         </div>
 
-        {/* Options row */}
-        <div className="grid sm:grid-cols-3 gap-4">
-          <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
-              Map Type
-            </label>
-            <Select value={mapType} onValueChange={(v) => setMapType(v as MapType)}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {(["Tycoon", "Parkour", "Prop Hunt", "Escape", "Simulator", "Other"] as MapType[]).map(
-                  (t) => (
-                    <SelectItem key={t} value={t}>{t}</SelectItem>
-                  )
-                )}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
-              Difficulty
-            </label>
-            <Select value={difficulty} onValueChange={(v) => setDifficulty(v as Difficulty)}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {(["Beginner", "Intermediate", "Advanced"] as Difficulty[]).map((d) => (
-                  <SelectItem key={d} value={d}>{d}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
-              Output Type
-            </label>
-            <Select value={outputType} onValueChange={(v) => setOutputType(v as OutputType)}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {(["Code only", "Code + Explanation", "Full Setup Guide"] as OutputType[]).map(
-                  (o) => (
-                    <SelectItem key={o} value={o}>{o}</SelectItem>
-                  )
-                )}
-              </SelectContent>
-            </Select>
+        {/* Suggestion chips */}
+        <div>
+          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2.5">
+            Quick ideas — click to fill
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {SUGGESTIONS.map((s) => (
+              <button
+                key={s}
+                type="button"
+                onClick={() => setDescription(s)}
+                className="text-xs px-3 py-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] text-slate-400 hover:border-purple-500/40 hover:text-purple-300 hover:bg-purple-500/[0.06] transition-all"
+              >
+                {s}
+              </button>
+            ))}
           </div>
         </div>
 

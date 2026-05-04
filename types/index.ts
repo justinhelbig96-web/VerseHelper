@@ -72,6 +72,12 @@ export interface FixErrorResult {
 
 // ─── Tutorial ─────────────────────────────────────────────────────────────────
 
+export interface CodeAnnotation {
+  section: string;
+  code: string;
+  explanation: string;
+}
+
 export interface Tutorial {
   slug: string;
   title: string;
@@ -85,6 +91,7 @@ export interface Tutorial {
   setupSteps: string[];
   commonMistakes: string[];
   tags: string[];
+  codeAnnotations?: CodeAnnotation[];
 }
 
 // ─── Pricing ──────────────────────────────────────────────────────────────────
