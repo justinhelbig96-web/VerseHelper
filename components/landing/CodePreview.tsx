@@ -182,7 +182,7 @@ export function CodePreview() {
               {/* Code */}
               <div className="p-5 overflow-x-auto">
                 <pre className="code-block leading-7 whitespace-pre">
-                  {highlight(VERSE_EXAMPLE)}
+                  <CodeHighlight code={VERSE_EXAMPLE} />
                 </pre>
               </div>
             </div>
